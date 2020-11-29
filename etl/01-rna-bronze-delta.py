@@ -223,3 +223,5 @@ display(
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC Now that we have Bronze tables, the next steps are to get the data in the right shape for downstream analysis
