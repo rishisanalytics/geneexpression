@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC 
+# MAGIC ##<img src="https://databricks.com/wp-content/themes/databricks/assets/images/header_logo_2x.png" alt="logo" width="150"/> 
 # MAGIC ## Download gene expression profiles and clinical data using [GDC Data Transfer Tool](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool)
 # MAGIC 
 # MAGIC The Genomic Data Commons data portal's interface is first used to create a manifest file. This contains the UUID(s) of the gene expression profiles we would like to download.
@@ -94,7 +94,7 @@ get_gdc_client(script_path)
 # COMMAND ----------
 
 #set this to a factor of the cores in your cluster
-parallelism = 576
+parallelism = 1728
 
 #loop through partitioned manifest and download files in parallel
 manifest.select("id").repartition(parallelism)\
@@ -112,3 +112,12 @@ display(
 # MAGIC %md
 # MAGIC 
 # MAGIC Next steps are to ingest these profiles and explore the data
+
+# COMMAND ----------
+
+def cleanup():
+  dbutils.fs.rm(output_path.replace('/dbfs/','dbfs:/'), False)
+  dbutils.fs.mkdirs(output_path.replace('/dbfs/','dbfs:/'))
+  return
+
+#cleanup()
