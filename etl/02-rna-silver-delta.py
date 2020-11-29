@@ -198,7 +198,26 @@ for df_name, df in df_names.items():
 
 # MAGIC %md
 # MAGIC ###5.1 Optimize Tables
-# MAGIC Optimise compacts tables in to large chunks to avoid a small file problem. It also collects statistics on the data to enable improved query performance
+# MAGIC Optimise compacts tables in to large chunks to avoid a small file problem. It also collects statistics on the data to enable improved query performance.
+# MAGIC This could be run occasionally to tidy up the data.
 
 # COMMAND ----------
 
+sql = """
+OPTIMIZE delta.`{}` 
+"""
+
+display(
+  spark.sql(sql.format(os.path.join(delta_silver_path, "clinical-meta")))
+)
+
+# COMMAND ----------
+
+display(
+  spark.sql(sql.format(os.path.join(delta_silver_path, "expression")))
+)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC DESCRIBE HISTORY delta.`dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/silver/expression`
