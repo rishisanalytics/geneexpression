@@ -170,6 +170,12 @@ display(
 
 # COMMAND ----------
 
+display(
+  df_expression_silver.selectExpr('id','norm_counts_arr[0]','norm_counts_arr[10]','norm_counts_arr[20]','norm_counts_arr[30]')
+)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##5. Write to Silver Delta Tables
 

@@ -67,6 +67,7 @@ display(
 
 # COMMAND ----------
 
+#List the primary columns i'll use for analysis
 selected_clinical_cols=[
  'file_id',
  'project_id',

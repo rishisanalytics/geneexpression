@@ -5,7 +5,7 @@
 # MAGIC 
 # MAGIC The Genomic Data Commons data portal's interface is first used to create a manifest file. This contains the UUID(s) of the gene expression profiles we would like to download.
 # MAGIC 
-# MAGIC <img src="/files/tables/rishi.ghose@databricks.com/genomics/rna/gdc.png" width=1200/>
+# MAGIC <img src="https://rishi-public-resources.s3-eu-west-1.amazonaws.com/images/gdc.png" width=1200/>
 
 # COMMAND ----------
 
@@ -109,6 +109,10 @@ display(
 
 # COMMAND ----------
 
+len(dbutils.fs.ls(output_path.replace("/dbfs","dbfs:")))
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC 
 # MAGIC Next steps are to ingest these profiles and explore the data
@@ -116,8 +120,10 @@ display(
 # COMMAND ----------
 
 def cleanup():
-  dbutils.fs.rm(output_path.replace('/dbfs/','dbfs:/'), False)
+  dbutils.fs.rm(output_path.replace('/dbfs/','dbfs:/'), True)
+  dbutils.fs.rm(script_path.replace('/dbfs/','dbfs:/'), True)
   dbutils.fs.mkdirs(output_path.replace('/dbfs/','dbfs:/'))
+  dbutils.fs.mkdirs(script_path.replace('/dbfs/','dbfs:/'))
   return
 
 #cleanup()
