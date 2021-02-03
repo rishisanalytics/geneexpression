@@ -202,6 +202,24 @@ for df_name, df in df_names.items():
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC 
+# MAGIC --create gene expression silver table
+# MAGIC DROP TABLE IF EXISTS geneexp.expression_silver;
+# MAGIC 
+# MAGIC CREATE TABLE IF NOT EXISTS geneexp.expression_silver
+# MAGIC   USING DELTA
+# MAGIC   LOCATION 'dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/silver/expression';
+# MAGIC   
+# MAGIC --create clinical-meta silver table
+# MAGIC DROP TABLE IF EXISTS geneexp.clinical_meta_silver;
+# MAGIC 
+# MAGIC CREATE TABLE IF NOT EXISTS geneexp.clinical_meta_silver
+# MAGIC   USING DELTA
+# MAGIC   LOCATION 'dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/silver/clinical-meta';
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ###5.1 Optimize Tables
 # MAGIC Optimise compacts tables in to large chunks to avoid a small file problem. It also collects statistics on the data to enable improved query performance.
@@ -226,4 +244,4 @@ display(
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DESCRIBE HISTORY delta.`dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/silver/expression`
+# MAGIC DESCRIBE HISTORY geneexp.expression_silver

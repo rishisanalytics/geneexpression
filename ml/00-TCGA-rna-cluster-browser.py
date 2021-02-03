@@ -170,3 +170,13 @@ with mlflow.start_run(nested=True) as run:
   .mode('overwrite')
   .save(os.path.join(delta_gold_path,'expressions-clinical'))
 )
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC 
+# MAGIC DROP TABLE IF EXISTS geneexp.expressions_clinical_gold;
+# MAGIC 
+# MAGIC CREATE TABLE IF NOT EXISTS geneexp.expressions_clinical_gold
+# MAGIC   USING DELTA
+# MAGIC   LOCATION 'dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/gold/expressions-clinical';

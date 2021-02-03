@@ -30,7 +30,7 @@ dbutils.fs.mkdirs(output_path.replace('/dbfs/','dbfs:/'))
 
 # COMMAND ----------
 
-# MAGIC %fs head dbfs:/home/rishi.ghose@databricks.com/data/genomics/rna/gdc_manifest_20200224_192255.txt
+# MAGIC %fs ls dbfs:/home/rishi.ghose@databricks.com/data/genomics/rna/
 
 # COMMAND ----------
 
@@ -106,6 +106,20 @@ manifest.select("id").repartition(parallelism)\
 display(
   dbutils.fs.ls(output_path.replace("/dbfs","dbfs:"))
 )
+
+# COMMAND ----------
+
+#download any files that were missed
+from pyspark.sql.functions import *
+
+df = spark.createDataFrame(dbutils.fs.ls(output_path.replace("/dbfs","dbfs:")))
+df = df.withColumn("name", split(col("name"), "/")[0])
+
+df.coalesce(1)
+manifest.coalesce(1)
+
+manifest.join(df, manifest.id==df.name, "leftanti").select("id").repartition(320)\
+  .foreach(lambda x: download_data(script_path,x[0], output_path))
 
 # COMMAND ----------
 

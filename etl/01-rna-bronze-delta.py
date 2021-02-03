@@ -196,6 +196,43 @@ display(dbutils.fs.ls(delta_bronze_path))
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC 
+# MAGIC --create database
+# MAGIC CREATE DATABASE IF NOT EXISTS geneexp
+# MAGIC   COMMENT "Database for gene expression"
+# MAGIC   LOCATION "dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/databases";
+# MAGIC   
+# MAGIC --create gene expression table
+# MAGIC DROP TABLE IF EXISTS geneexp.expression_bronze;
+# MAGIC 
+# MAGIC CREATE TABLE IF NOT EXISTS geneexp.expression_bronze
+# MAGIC   USING DELTA
+# MAGIC   LOCATION 'dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/bronze/expression';
+# MAGIC   
+# MAGIC --create gdc sample sheet table
+# MAGIC DROP TABLE IF EXISTS geneexp.gdc_sample_sheet_bronze;
+# MAGIC 
+# MAGIC CREATE TABLE IF NOT EXISTS geneexp.gdc_sample_sheet_bronze
+# MAGIC   USING DELTA
+# MAGIC   LOCATION 'dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/bronze/gdc_sample_sheet';
+# MAGIC   
+# MAGIC --create clinical table
+# MAGIC DROP TABLE IF EXISTS geneexp.clinical_bronze;
+# MAGIC 
+# MAGIC CREATE TABLE IF NOT EXISTS geneexp.clinical_bronze
+# MAGIC   USING DELTA
+# MAGIC   LOCATION 'dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/bronze/clinical';
+# MAGIC   
+# MAGIC --create metadata table
+# MAGIC DROP TABLE IF EXISTS geneexp.metadata_bronze;
+# MAGIC 
+# MAGIC CREATE TABLE IF NOT EXISTS geneexp.metadata_bronze
+# MAGIC   USING DELTA
+# MAGIC   LOCATION 'dbfs:/home/rishi.ghose@databricks.com/delta/genomics/rna/bronze/metadata';
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##4. Quick Data Exploration
 # MAGIC * Explore how many samples there are by projects
@@ -203,13 +240,11 @@ display(dbutils.fs.ls(delta_bronze_path))
 
 # COMMAND ----------
 
-display(
-  spark.sql("""
-  SELECT project_id, count(*) TotalSamples FROM delta.`{}` 
-  GROUP BY project_id
-  ORDER BY TotalSamples DESC
-  """.format(os.path.join(delta_bronze_path, "clinical")))
-)
+# MAGIC %sql
+# MAGIC 
+# MAGIC SELECT project_id, count(*) TotalSamples FROM geneexp.clinical_bronze
+# MAGIC   GROUP BY project_id
+# MAGIC   ORDER BY TotalSamples DESC
 
 # COMMAND ----------
 
